@@ -19,7 +19,7 @@ const page = async ({ params }: RouteParams) => {
             <div className='flex flex-row gap-4 justify-between'>
                 <div className='flex flex-row gap-4 items-center max-sm:flex-col'>
                     <div className='flex flex-row gap-4 items-center'>
-                        <h3 className='capitalize'>{interview.role} Session</h3>
+                        <h3 className='capitalize'>Practice Session</h3>
                     </div>
                 </div>
 

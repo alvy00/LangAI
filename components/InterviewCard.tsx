@@ -1,60 +1,63 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React from 'react'
 import dayjs from 'dayjs'
-import Image from 'next/image';
-import { getRandomInterviewCover } from '@/lib/utils';
-import { Button } from './ui/button';
-import Link from 'next/link';
-import DisplayTechIcons from './DisplayTechIcons';
-import { getFeedbackByInterviewId } from '@/lib/actions/general.action';
+import Image from 'next/image'
+import { getRandomInterviewCover } from '@/lib/utils'
+import { Button } from './ui/button'
+import Link from 'next/link'
+import { getFeedbackByInterviewId } from '@/lib/actions/general.action'
 
-const InterviewCard = async ({ id, userId, role, type, techstack, createdAt}: InterviewCardProps) => {
+const PracticeCard = async ({ id, userId, type, createdAt }: InterviewCardProps) => {
+  const feedback = (userId && id) ? await getFeedbackByInterviewId({ interviewId: id, userId }) : null
 
-    const feedback = (userId && id)? await getFeedbackByInterviewId({interviewId: id, userId}) : null;
-    const normalizedType = /mix/i.test(type)? 'Mix': type;
-    const formattedDate = dayjs(feedback?.createdAt || createdAt || Date.now()).format('MMM D, YYYY');
+  const normalizedType = type ? `Topic: ${type.charAt(0).toUpperCase() + type.slice(1)}` : 'Practice'
+  const formattedDate = dayjs(feedback?.createdAt || createdAt || Date.now()).format('MMM D, YYYY')
 
-    return (
-        <div className='card-border w-[360px] max-sm:w-full min-h-96'>
-            <div className='card-interview'>
-                <div>
-                    <div className='absolute top-0 right-0 w-fit px-4 py-2 rounded-bl-lg bg-light-600'>
-                        <p className='badge-text'>{normalizedType}</p>
-                    </div>
+  return (
+    <div className='card-border w-[360px] max-sm:w-full min-h-96'>
+      <div className='card-interview'>
+        <div>
+          <div className='absolute top-0 right-0 w-fit px-4 py-2 rounded-bl-lg bg-light-600'>
+            <p className='badge-text'>{normalizedType}</p>
+          </div>
 
-                    <Image src={getRandomInterviewCover()} alt="cover image" width={90} height={90} className='rounded-full object-fit size-[90px]' />
+          <Image
+            src={getRandomInterviewCover()}
+            alt="practice image"
+            width={90}
+            height={90}
+            className='rounded-full object-fit size-[90px]'
+          />
 
-                    <h3 className='mt-5 capitalize'>
-                        {role} Session
-                    </h3>
+          <h3 className='mt-5 capitalize'>English Practice Session</h3>
 
-                    <div className='flex flex-row gap-5 mt-3'>
-                        <div className='flex flex-row gap-2'>
-                            <Image src='/calendar.svg' alt='calendar' width={22} height={22} />
-                            <p>{formattedDate}</p>
-                        </div>
-
-                        <div className='flex flex-row gap-2 items-center'>
-                            <Image src='/star.svg' alt='star' width={22} height={22} />
-                            <p>{feedback?.totalScore || '---'}/100</p>
-                        </div>
-                    </div>
-
-                    <p className='line-clamp-2 mt-5'>{feedback?.finalAssessment || "You haven't taken the session yet!"}</p>
-                </div>
-
-                <div className='flex flex-row justify-between'>
-                    <DisplayTechIcons techStack={techstack}/>
-                    <Button className='btn-primary'>
-                        <Link href={feedback? `/interview/${id}/feedback` : `/interview/${id}`}>
-                            {feedback? 'Check Feedback' : 'View Session'}
-                        </Link>
-                    </Button>
-
-                </div>
+          <div className='flex flex-row gap-5 mt-3'>
+            <div className='flex flex-row gap-2'>
+              <Image src='/calendar.svg' alt='calendar' width={22} height={22} />
+              <p>{formattedDate}</p>
             </div>
+
+            <div className='flex flex-row gap-2 items-center'>
+              <Image src='/star.svg' alt='score' width={22} height={22} />
+              <p>{feedback?.totalScore ?? '---'}/100</p>
+            </div>
+          </div>
+
+          <p className='line-clamp-2 mt-5'>
+            {feedback?.finalAssessment || "You haven't completed this session yet. Let's go!"}
+          </p>
         </div>
-    )
+
+        <div className='flex flex-row justify-between'>
+          <Button className='btn-primary'>
+            <Link href={feedback ? `/interview/${id}/feedback` : `/interview/${id}`}>
+              {feedback ? 'View Feedback' : 'Start Practice'}
+            </Link>
+          </Button>
+        </div>
+      </div>
+    </div>
+  )
 }
 
-export default InterviewCard
+export default PracticeCard

@@ -1,106 +1,10 @@
 import { CreateAssistantDTO } from "@vapi-ai/web/dist/api";
 import { z } from "zod";
 
-export const mappings = {
-  "react.js": "react",
-  reactjs: "react",
-  react: "react",
-  "next.js": "nextjs",
-  nextjs: "nextjs",
-  next: "nextjs",
-  "vue.js": "vuejs",
-  vuejs: "vuejs",
-  vue: "vuejs",
-  "express.js": "express",
-  expressjs: "express",
-  express: "express",
-  "node.js": "nodejs",
-  nodejs: "nodejs",
-  node: "nodejs",
-  mongodb: "mongodb",
-  mongo: "mongodb",
-  mongoose: "mongoose",
-  mysql: "mysql",
-  postgresql: "postgresql",
-  sqlite: "sqlite",
-  firebase: "firebase",
-  docker: "docker",
-  kubernetes: "kubernetes",
-  aws: "aws",
-  azure: "azure",
-  gcp: "gcp",
-  digitalocean: "digitalocean",
-  heroku: "heroku",
-  photoshop: "photoshop",
-  "adobe photoshop": "photoshop",
-  html5: "html5",
-  html: "html5",
-  css3: "css3",
-  css: "css3",
-  sass: "sass",
-  scss: "sass",
-  less: "less",
-  tailwindcss: "tailwindcss",
-  tailwind: "tailwindcss",
-  bootstrap: "bootstrap",
-  jquery: "jquery",
-  typescript: "typescript",
-  ts: "typescript",
-  javascript: "javascript",
-  js: "javascript",
-  "angular.js": "angular",
-  angularjs: "angular",
-  angular: "angular",
-  "ember.js": "ember",
-  emberjs: "ember",
-  ember: "ember",
-  "backbone.js": "backbone",
-  backbonejs: "backbone",
-  backbone: "backbone",
-  nestjs: "nestjs",
-  graphql: "graphql",
-  "graph ql": "graphql",
-  apollo: "apollo",
-  webpack: "webpack",
-  babel: "babel",
-  "rollup.js": "rollup",
-  rollupjs: "rollup",
-  rollup: "rollup",
-  "parcel.js": "parcel",
-  parceljs: "parcel",
-  npm: "npm",
-  yarn: "yarn",
-  git: "git",
-  github: "github",
-  gitlab: "gitlab",
-  bitbucket: "bitbucket",
-  figma: "figma",
-  prisma: "prisma",
-  redux: "redux",
-  flux: "flux",
-  redis: "redis",
-  selenium: "selenium",
-  cypress: "cypress",
-  jest: "jest",
-  mocha: "mocha",
-  chai: "chai",
-  karma: "karma",
-  vuex: "vuex",
-  "nuxt.js": "nuxt",
-  nuxtjs: "nuxt",
-  nuxt: "nuxt",
-  strapi: "strapi",
-  wordpress: "wordpress",
-  contentful: "contentful",
-  netlify: "netlify",
-  vercel: "vercel",
-  "aws amplify": "amplify",
-};
-
 export const interviewer: CreateAssistantDTO = {
-  name: "Interviewer",
+  name: "English Coach",
   firstMessage:
-    "Hello! Thank you for taking the time to speak with me today. I'm excited to learn more about you and your experience.",
+    "Hi there! I'm your friendly English speaking coach. Ready to practice and build fluency together?",
   transcriber: {
     provider: "deepgram",
     model: "nova-2",
@@ -121,60 +25,54 @@ export const interviewer: CreateAssistantDTO = {
     messages: [
       {
         role: "system",
-        content: `You are a professional job interviewer conducting a real-time voice interview with a candidate. Your goal is to assess their qualifications, motivation, and fit for the role.
+        content: `You are a kind and encouraging English-speaking coach helping a learner practice real-life conversations. Your goal is to improve their fluency, vocabulary, pronunciation, and confidence in spoken English.
 
-Interview Guidelines:
-Follow the structured question flow:
-{{questions}}
+Conversation Guidelines:
+- Focus on practical, everyday topics like daily life, hobbies, travel, work, or school.
+- Ask open-ended, conversational questions to keep the learner talking.
+- Gently correct any major grammar, vocabulary, or pronunciation issues, and explain alternatives.
+- Encourage the user often. Say things like "Great answer!", "Nice job explaining that", or "You're doing really well!"
+- Use slow, clear, and natural speech.
+- Avoid overly technical grammar terms unless asked.
+- Always follow up with a simple question to continue the conversation.
 
-Engage naturally & react appropriately:
-Listen actively to responses and acknowledge them before moving forward.
-Ask brief follow-up questions if a response is vague or requires more detail.
-Keep the conversation flowing smoothly while maintaining control.
-Be professional, yet warm and welcoming:
+Tone & Behavior:
+- Be supportive, curious, and friendly.
+- Keep responses short and clear—this is a real-time voice chat.
+- Never judge mistakes. Instead, highlight improvements and give suggestions.
+- If the user asks grammar/vocab questions, explain them with simple examples.
+- If the user is shy or gives short answers, gently prompt them to say more.
 
-Use official yet friendly language.
-Keep responses concise and to the point (like in a real voice interview).
-Avoid robotic phrasing—sound natural and conversational.
-Answer the candidate’s questions professionally:
-
-If asked about the role, company, or expectations, provide a clear and relevant answer.
-If unsure, redirect the candidate to HR for more details.
-
-Conclude the interview properly:
-Thank the candidate for their time.
-Inform them that the company will reach out soon with feedback.
-End the conversation on a polite and positive note.
-
-
-- Be sure to be professional and polite.
-- Keep all your responses short and simple. Use official language, but be kind and welcoming.
-- This is a voice conversation, so keep your responses short, like in a real conversation. Don't ramble for too long.`,
+End the session with encouragement:
+- Thank the user for practicing.
+- Suggest they try again soon or review vocabulary.
+- Make them feel proud of their effort!`,
       },
     ],
   },
 };
 
+
 export const feedbackSchema = z.object({
   totalScore: z.number(),
   categoryScores: z.tuple([
     z.object({
-      name: z.literal("Communication Skills"),
+      name: z.literal("Fluency"),
       score: z.number(),
       comment: z.string(),
     }),
     z.object({
-      name: z.literal("Technical Knowledge"),
+      name: z.literal("Vocabulary Usage"),
       score: z.number(),
       comment: z.string(),
     }),
     z.object({
-      name: z.literal("Problem Solving"),
+      name: z.literal("Grammar Accuracy"),
       score: z.number(),
       comment: z.string(),
     }),
     z.object({
-      name: z.literal("Cultural Fit"),
+      name: z.literal("Pronunciation"),
       score: z.number(),
       comment: z.string(),
     }),
@@ -188,43 +86,3 @@ export const feedbackSchema = z.object({
   areasForImprovement: z.array(z.string()),
   finalAssessment: z.string(),
 });
-
-export const interviewCovers = [
-  "/adobe.png",
-  "/amazon.png",
-  "/facebook.png",
-  "/hostinger.png",
-  "/pinterest.png",
-  "/quora.png",
-  "/reddit.png",
-  "/skype.png",
-  "/spotify.png",
-  "/telegram.png",
-  "/tiktok.png",
-  "/yahoo.png",
-];
-
-export const dummyInterviews: Interview[] = [
-  {
-    id: "1",
-    userId: "user1",
-    role: "Frontend Developer",
-    type: "Technical",
-    techstack: ["React", "TypeScript", "Next.js", "Tailwind CSS"],
-    level: "Junior",
-    questions: ["What is React?"],
-    finalized: false,
-    createdAt: "2024-03-15T10:00:00Z",
-  },
-  {
-    id: "2",
-    userId: "user1",
-    role: "Full Stack Developer",
-    type: "Mixed",
-    techstack: ["Node.js", "Express", "MongoDB", "React"],
-    level: "Senior",
-    questions: ["What is Node.js?"],
-    finalized: false,
-    createdAt: "2024-03-14T15:30:00Z",
-  },
-];
