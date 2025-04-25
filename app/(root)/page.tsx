@@ -5,7 +5,8 @@ import React from 'react'
 import Image from 'next/image'
 import { dummyInterviews } from '@/constants'
 import InterviewCard from '@/components/InterviewCard'
-import { getCurrentUser, getInterviewsByUserId, getLatestInterviews } from '@/lib/actions/auth.action'
+import { getCurrentUser } from '@/lib/actions/auth.action'
+import { getInterviewsByUserId, getLatestInterviews } from '@/lib/actions/general.action'
 
 const page = async () => {
   const user = await getCurrentUser();
@@ -25,7 +26,7 @@ const page = async () => {
           <h2>Sharpen Your Speaking Skills with AI-Guided Practice & Feedback</h2>
           <p className='text-lg'>Sound fluent and self-assured in every interaction.</p>
           <Button asChild className='btn-primary max-sm:w-full'>
-            <Link href='/interview'>Start a Practice Session</Link>
+            <Link href='/interview'>Create a Session</Link>
           </Button>
         </div>
 
