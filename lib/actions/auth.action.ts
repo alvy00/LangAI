@@ -5,6 +5,7 @@ import { db, auth } from "@/firebase/admin";
 import { CollectionReference, DocumentData, DocumentReference } from "firebase-admin/firestore";
 import { documentId } from "firebase/firestore";
 import { cookies } from "next/headers";
+import { SignUpParams, SignInParams, User } from "@/types";
 
 const ONE_WEEK = 60 * 60 * 24 * 7 * 1000;
 

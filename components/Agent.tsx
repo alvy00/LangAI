@@ -154,11 +154,11 @@ const PracticeAgent = ({ userName, userId, type, interviewId, questions }: Agent
         {callStatus !== 'ACTIVE' ? (
           <button className='relative btn-call' onClick={handleCall}>
             <span className={cn('absolute animate-ping rounded-full opacity-75', callStatus !== 'CONNECTING' && 'hidden')} />
-            <span>{isCallInactiveOrFinished ? 'Start Practice' : '...'}</span>
+            <span>{isCallInactiveOrFinished ? 'Start' : '...'}</span>
           </button>
         ) : (
           <button className='btn-disconnect' onClick={handleDisconnect}>
-            End Practice
+            End
           </button>
         )}
       </div>
