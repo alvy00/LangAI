@@ -1,4 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
+'use server'
+
 import { feedbackSchema } from "@/constants";
 import { db, auth } from "@/firebase/admin";
 import { google } from "@ai-sdk/google";

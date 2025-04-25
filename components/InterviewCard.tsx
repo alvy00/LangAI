@@ -10,7 +10,7 @@ import { getFeedbackByInterviewId } from '@/lib/actions/general.action';
 
 const InterviewCard = async ({ id, userId, role, type, techstack, createdAt}: InterviewCardProps) => {
 
-    const feedback = (userId && id)? await getFeedbackByInterviewId({interviewId: id, userId});
+    const feedback = (userId && id)? await getFeedbackByInterviewId({interviewId: id, userId}) : null;
     const normalizedType = /mix/i.test(type)? 'Mix': type;
     const formattedDate = dayjs(feedback?.createdAt || createdAt || Date.now()).format('MMM D, YYYY');
 
