@@ -9,6 +9,7 @@ import React, { useEffect, useState } from 'react'
 import { vapi } from '@/lib/vapi.sdk'
 import { interviewer } from '@/constants'
 import { createFeedback } from '@/lib/actions/general.action'
+import { AgentProps } from '@/types'
 
 enum CallStatus {
   INACTIVE = 'INACTIVE',

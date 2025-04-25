@@ -2,15 +2,15 @@
 import React from 'react'
 import dayjs from 'dayjs'
 import Image from 'next/image'
-import { getRandomInterviewCover } from '@/lib/utils'
 import { Button } from './ui/button'
 import Link from 'next/link'
 import { getFeedbackByInterviewId } from '@/lib/actions/general.action'
+import { InterviewCardProps } from '@/types'
 
-const PracticeCard = async ({ id, userId, type, createdAt }: InterviewCardProps) => {
+const PracticeCard = async ({ id, userId, createdAt }: InterviewCardProps) => {
   const feedback = (userId && id) ? await getFeedbackByInterviewId({ interviewId: id, userId }) : null
 
-  const normalizedType = type ? `Topic: ${type.charAt(0).toUpperCase() + type.slice(1)}` : 'Practice'
+  const normalizedType = 'Session'
   const formattedDate = dayjs(feedback?.createdAt || createdAt || Date.now()).format('MMM D, YYYY')
 
   return (
@@ -20,14 +20,6 @@ const PracticeCard = async ({ id, userId, type, createdAt }: InterviewCardProps)
           <div className='absolute top-0 right-0 w-fit px-4 py-2 rounded-bl-lg bg-light-600'>
             <p className='badge-text'>{normalizedType}</p>
           </div>
-
-          <Image
-            src={getRandomInterviewCover()}
-            alt="practice image"
-            width={90}
-            height={90}
-            className='rounded-full object-fit size-[90px]'
-          />
 
           <h3 className='mt-5 capitalize'>English Practice Session</h3>
 

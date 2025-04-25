@@ -37,21 +37,18 @@ export interface Interview {
   questions: string[];
   createdAt: string;
   userId: string;
-  type: string;
   finalized: boolean;
 }
 
 export interface InterviewCardProps {
   id?: string;
   userId?: string;
-  type: string;
   createdAt?: string;
 }
 
 export interface InterviewFormProps {
   interviewId: string;
   level: string;
-  type: string;
   amount: number;
 }
 
