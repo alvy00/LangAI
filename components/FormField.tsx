@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React from 'react'
-import { Controller, FieldValues } from 'react-hook-form'
+import { Control, Controller, FieldValues, Path } from 'react-hook-form'
 import {
   Form,
   FormControl,
@@ -19,7 +19,7 @@ interface FormFieldProps<T extends FieldValues> {
     type?: 'text' | 'email' | 'password' | 'file'
 }
 
-const FormField = ({control, name, label, placeholder, type = 'text'}: FormFieldProps<T>) => {
+const FormField = <T extends FieldValues>({control, name, label, placeholder, type = 'text'}: FormFieldProps<T>) => {
   return (
     <Controller 
         control={control}
