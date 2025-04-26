@@ -42,6 +42,7 @@ export interface Interview {
 
 export interface InterviewCardProps {
   id?: string;
+  level?: string;
   userId?: string;
   createdAt?: string;
 }

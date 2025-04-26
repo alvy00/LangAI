@@ -10,8 +10,8 @@ const monaSans = Mona_Sans({
 
 
 export const metadata: Metadata = {
-  title: "AsyncLanguageAI",
-  description: "Mock English sessions",
+  title: "AsyncLangAI",
+  description: "",
 };
 
 export default function RootLayout({

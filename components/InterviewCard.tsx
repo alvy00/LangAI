@@ -7,10 +7,10 @@ import Link from 'next/link'
 import { getFeedbackByInterviewId } from '@/lib/actions/general.action'
 import { InterviewCardProps } from '@/types'
 
-const PracticeCard = async ({ id, userId, createdAt }: InterviewCardProps) => {
+const PracticeCard = async ({ id, level, userId, createdAt }: InterviewCardProps) => {
   const feedback = (userId && id) ? await getFeedbackByInterviewId({ interviewId: id, userId }) : null
 
-  const normalizedType = 'Session'
+  const normalizedType = level;
   const formattedDate = dayjs(feedback?.createdAt || createdAt || Date.now()).format('MMM D, YYYY')
 
   return (
