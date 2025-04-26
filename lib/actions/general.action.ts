@@ -62,7 +62,7 @@ const { object: { totalScore, categoryScores, strengths, areasForImprovement, fi
 
     ---
 
-    
+
     Here is the session transcript:
     \`\`\`
     ${cleanedTranscript}
@@ -169,7 +169,7 @@ let dynamicScore = totalScore + (Math.random() * 2 - 1);
 dynamicScore = Math.max(0, Math.min(100, dynamicScore));
 
 // Save feedback
-await db.collection('feedback').add({
+const feedback = await db.collection('feedback').add({
   interviewId,
   userId,
   totalScore: dynamicScore,
