@@ -166,11 +166,11 @@ const Page = () => {
 
                 <div className="flex flex-col md:flex-row gap-4 mt-6">
 
-                    <Button onClick={onSubmit} className="btn-primary flex-1">  
+                    <Button type="submit" className="btn-primary flex-1">  
                         <p className="text-sm font-semibold text-black">Create Session</p>
                     </Button>
 
-                    <Button className="btn-secondary flex-1">
+                    <Button type="button" className="btn-secondary flex-1">
                         <Link href="/">
                             <p className="text-sm font-semibold text-primary-200">Back to Dashboard</p>
                         </Link>
