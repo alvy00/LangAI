@@ -50,7 +50,7 @@ export async function createFeedback(params: CreateFeedbackParams) {
         }),
         schema: feedbackSchema,
         prompt: `
-      You are an advanced English language evaluator, assessing a learner's spoken English based on a transcript of their session. Your feedback should simulate a tough but fair speaking examiner from IELTS or TOEFL.
+      You are a highly experienced English proficiency evaluator trained to simulate real-world speaking assessments like IELTS Band 9 or TOEFL. You are reviewing a conversation-based practice session transcript to provide an in-depth, honest evaluation. Base your scoring on international CEFR standards (B2–C2 range) and academic-level communication expectations.
       
       Here is the session transcript:
       \`\`\`
@@ -59,81 +59,89 @@ export async function createFeedback(params: CreateFeedbackParams) {
       
       ---
       
-      ## Evaluation Instructions:
+      ## Evaluation Criteria
       
-      Give a score out of 100 for each of the following categories. Apply penalties and rewards based on the criteria below.
+      Score the speaker from 0 to 100 in the categories below. Use strict logic and apply dynamic penalties/rewards as defined.
       
-      ### 1. Communication Skills (Clarity & Fluency)
+      ### 1. **Communication Skills**
       - ✅ Reward:
-        - Logical and structured answers.
-        - Clear progression of ideas.
-        - Use of discourse markers (e.g., "Firstly", "To summarize").
+        - Clear organization and coherence of thoughts.
+        - Use of discourse markers, transitions, and structured elaboration.
+        - Thoughtful development of ideas.
       - ❌ Penalize:
-        - Fragmented sentences.
-        - Repeating same idea multiple times with no clarity.
+        - Fragmented responses.
+        - Repeating points with no progression.
+        - Overuse of filler phrases (e.g., "like", "you know").
       
-      ### 2. Vocabulary & Grammar
+      ### 2. **Vocabulary & Grammar**
       - ✅ Reward:
-        - Use of topic-specific vocabulary.
-        - Appropriate use of idioms, collocations, or phrasal verbs.
-        - Complex sentence structures.
+        - Use of precise, topic-specific vocabulary.
+        - Complex grammar used naturally (e.g., conditionals, passive voice, modals).
+        - Variety in sentence structure.
       - ❌ Penalize:
-        - Repetition of basic vocabulary.
-        - Grammar errors that change meaning.
-        - Overuse of simple tenses.
+        - Frequent grammar errors that obscure meaning.
+        - Overuse of simple structures.
+        - Incorrect or awkward word usage.
       
-      ### 3. Pronunciation & Clarity
+      ### 3. **Pronunciation & Clarity**
       - ✅ Reward:
-        - Proper stress, rhythm, and intonation.
-        - Pronouncing difficult or uncommon words correctly.
+        - Clear articulation, natural intonation, and varied pacing.
+        - Use of stress and rhythm to emphasize key points.
       - ❌ Penalize:
-        - Mispronunciations that impair understanding.
-        - Flat or robotic tone throughout.
+        - Mispronunciations that cause confusion.
+        - Flat or robotic speech pattern.
       
-      ### 4. Confidence & Engagement
+      ### 4. **Confidence & Engagement**
       - ✅ Reward:
-        - Willingness to elaborate or take initiative in the conversation.
-        - Asking clarifying questions naturally.
+        - Willingness to elaborate, ask questions, or share personal insight.
+        - Natural flow and conversational tone.
       - ❌ Penalize:
-        - One-word answers.
-        - Abrupt silence or session ending without effort to continue.
+        - One-word or short answers.
+        - Long pauses, hesitations, or ending the session prematurely.
       
-      ### 5. Comprehension & Responsiveness
+      ### 5. **Comprehension & Responsiveness**
       - ✅ Reward:
-        - Quick and accurate responses to prompts.
-        - Building on previous points.
+        - Accurate and quick responses to questions.
+        - Deep understanding of prompts and ability to build on them.
       - ❌ Penalize:
         - Misinterpreting questions.
-        - Going off-topic frequently.
-        - Avoiding harder questions.
+        - Frequently drifting off-topic or avoiding complex prompts.
       
       ---
       
-      ## Bonus Scoring
-      - Give **extra credit** (up to +5 points total) for:
-        - Self-correction used effectively.
-        - Giving examples to support opinions.
-        - Demonstrating growth or reflection during the session.
+      ## Dynamic Bonuses & Penalties
       
-      ## Session Context Rules
-      - If the session has fewer than 3 complete learner responses, automatically deduct **15 points** from total.
-      - If total session time is under 1 minutes, deduct **10 points** for lack of engagement.
-      - If speaker avoids multiple questions or fails to expand, deduct **5–10 points**.
-      - If responses are expressive, show effort, and demonstrate thoughtfulness, **reward +10 points**.
-      - Cap total bonus to 10 points max.
+      Apply the following based on session quality:
+      
+      - ⬆️ **Bonuses (Max +10 points total)**:
+        - Self-correction used effectively (+2).
+        - Provided examples, analogies, or anecdotes (+2).
+        - Clear signs of reflection or improvement throughout the session (+3).
+        - Seamless transitions and linking ideas fluently (+3).
+      
+      - ⬇️ **Penalties**:
+        - Less than 3 full learner responses: –15 points.
+        - Session under 1 minute: –10 points.
+        - Speaker avoids multiple prompts or doesn't attempt harder ones: –10 points.
+        - Robotic or disengaged delivery: –5 to –10 points.
+        - Repeatedly requesting to "skip" or failing to elaborate: –5 points.
       
       ---
       
-      ## Output:
-      - Final total score (out of 100), adjusted by the above rules.
-      - Category scores.
-      - 3+ specific strengths based on transcript.
-      - 3+ areas for improvement, with actionable suggestions.
-      - A short 3–5 sentence final assessment that’s honest, constructive, and tailored to this learner.
+      ## Output Required
       
-      System: You are a strict but encouraging English speaking examiner. Score fairly and avoid giving high marks for incomplete or low-effort sessions.
-        `
+      - Final **totalScore** (out of 100, adjusted with the logic above).
+      - A breakdown of **categoryScores**.
+      - A minimum of 3 specific **strengths**, each tied to a transcript example.
+      - A minimum of 3 **areas for improvement**, each with actionable advice.
+      - A **finalAssessment** paragraph (3–5 sentences) summarizing the learner’s current level, tone, and potential trajectory.
+      
+      Be direct, evidence-based, and personalized in your evaluation. Do not be overly generous. High scores must be earned with complexity, effort, and fluency.
+      `,
+        system:
+          "You are a certified English speaking examiner trained to assess advanced learners using international speaking standards. Provide structured, realistic, and actionable feedback.",
       });
+      
       
 
     const feedback = await db.collection('feedback').add({
