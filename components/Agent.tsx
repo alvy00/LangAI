@@ -123,7 +123,7 @@ const PracticeAgent = ({ userName, userId, type, interviewId, questions }: Agent
             <Image src='/ai-avatar.png' alt='coach avatar' width={65} height={54} className='object-cover' />
             {isSpeaking && <span className='animate-speak' />}
           </div>
-          <h3>Your English Coach</h3>
+          <h3>AI</h3>
         </div>
 
         <div className='card-border'>
@@ -141,13 +141,20 @@ const PracticeAgent = ({ userName, userId, type, interviewId, questions }: Agent
       </div>
 
       {messages.length > 0 && (
-        <div className='transcript-border'>
-          <div className='transript'>
-            <p key={lastMessage} className={cn('transition-opacity duration-500 opacity-0', 'animate-fadeIn opacity-100')}>
-              {lastMessage}
-            </p>
-          </div>
+        <div className="transcript-border flex justify-center items-center w-full min-h-[50px] p-4">
+        <div className="transcript flex justify-center items-center w-full">
+          <p
+            key={lastMessage}
+            className={cn(
+              "transition-opacity duration-500 opacity-0",
+              "animate-fadeIn opacity-100",
+              "text-center"
+            )}
+          >
+            {lastMessage}
+          </p>
         </div>
+      </div>
       )}
 
       <div className='w-full flex justify-center'>
