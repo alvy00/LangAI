@@ -44,36 +44,97 @@ export async function createFeedback(params: CreateFeedbackParams) {
       .map(({ role, content }) => `- ${role}: ${content}`)
       .join('\n');
 
-    const { object: { totalScore, categoryScores, strengths, areasForImprovement, finalAssessment } } = await generateObject({
-      model: google('gemini-2.0-flash-001', {
-        structuredOutputs: false,
-      }),
-      schema: feedbackSchema,
-      prompt: `
-You are a professional English coach helping someone improve their spoken English through a conversation practice session. Your goal is to evaluate their speaking based on clarity, fluency, vocabulary, grammar, and confidence.
-
-Here is the transcript of the session:
-\`\`\`
-${formattedTranscript}
-\`\`\`
-
-Evaluate the speaker in the following areas with a score out of 100:
-- **Communication Skills**: Clarity, fluency, and ability to articulate ideas clearly.
-- **Vocabulary & Grammar**: Range of vocabulary and correct grammar usage.
-- **Pronunciation & Clarity**: Accuracy and clarity of spoken words.
-- **Confidence & Engagement**: How confidently and naturally the user speaks.
-- **Comprehension & Responsiveness**: Ability to understand and respond appropriately to prompts.
-
-Then provide:
-- A brief **final assessment** (3–5 sentences).
-- A list of **strengths** (at least 2).
-- A list of **areas for improvement** (at least 2).
-
-Be encouraging, but honest. Give specific examples when possible.
-      `,
-      system:
-        "You are a professional English coach providing feedback on a user's spoken English. Analyze the transcript and give helpful, structured, and supportive feedback.",
-    });
+      const { object: { totalScore, categoryScores, strengths, areasForImprovement, finalAssessment } } = await generateObject({
+        model: google('gemini-2.0-flash-001', {
+          structuredOutputs: false,
+        }),
+        schema: feedbackSchema,
+        prompt: `
+      You are an advanced English language evaluator, assessing a learner's spoken English based on a transcript of their session. Your feedback should simulate a tough but fair speaking examiner from IELTS or TOEFL.
+      
+      Here is the session transcript:
+      \`\`\`
+      ${formattedTranscript}
+      \`\`\`
+      
+      ---
+      
+      ## Evaluation Instructions:
+      
+      Give a score out of 100 for each of the following categories. Apply penalties and rewards based on the criteria below.
+      
+      ### 1. Communication Skills (Clarity & Fluency)
+      - ✅ Reward:
+        - Logical and structured answers.
+        - Clear progression of ideas.
+        - Use of discourse markers (e.g., "Firstly", "To summarize").
+      - ❌ Penalize:
+        - Fragmented sentences.
+        - Repeating same idea multiple times with no clarity.
+      
+      ### 2. Vocabulary & Grammar
+      - ✅ Reward:
+        - Use of topic-specific vocabulary.
+        - Appropriate use of idioms, collocations, or phrasal verbs.
+        - Complex sentence structures.
+      - ❌ Penalize:
+        - Repetition of basic vocabulary.
+        - Grammar errors that change meaning.
+        - Overuse of simple tenses.
+      
+      ### 3. Pronunciation & Clarity
+      - ✅ Reward:
+        - Proper stress, rhythm, and intonation.
+        - Pronouncing difficult or uncommon words correctly.
+      - ❌ Penalize:
+        - Mispronunciations that impair understanding.
+        - Flat or robotic tone throughout.
+      
+      ### 4. Confidence & Engagement
+      - ✅ Reward:
+        - Willingness to elaborate or take initiative in the conversation.
+        - Asking clarifying questions naturally.
+      - ❌ Penalize:
+        - One-word answers.
+        - Abrupt silence or session ending without effort to continue.
+      
+      ### 5. Comprehension & Responsiveness
+      - ✅ Reward:
+        - Quick and accurate responses to prompts.
+        - Building on previous points.
+      - ❌ Penalize:
+        - Misinterpreting questions.
+        - Going off-topic frequently.
+        - Avoiding harder questions.
+      
+      ---
+      
+      ## Bonus Scoring
+      - Give **extra credit** (up to +5 points total) for:
+        - Self-correction used effectively.
+        - Giving examples to support opinions.
+        - Demonstrating growth or reflection during the session.
+      
+      ## Session Context Rules
+      - If the session has fewer than 3 complete learner responses, automatically deduct **15 points** from total.
+      - If total session time is under 1 minutes, deduct **10 points** for lack of engagement.
+      - If speaker avoids multiple questions or fails to expand, deduct **5–10 points**.
+      - If responses are expressive, show effort, and demonstrate thoughtfulness, **reward +10 points**.
+      - Cap total bonus to 10 points max.
+      
+      ---
+      
+      ## Output:
+      - Final total score (out of 100), adjusted by the above rules.
+      - Category scores.
+      - 3+ specific strengths based on transcript.
+      - 3+ areas for improvement, with actionable suggestions.
+      - A short 3–5 sentence final assessment that’s honest, constructive, and tailored to this learner.
+      
+      System: You are a strict but encouraging English speaking examiner. Score fairly and avoid giving high marks for incomplete or low-effort sessions.
+        `
+      });
+      
 
     const feedback = await db.collection('feedback').add({
       interviewId,

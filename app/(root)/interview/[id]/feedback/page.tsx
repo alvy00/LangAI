@@ -24,7 +24,7 @@ const page = async ({ params }: RouteParams) => {
     <section className="section-feedback space-y-10">
       <div className="text-center">
         <h1 className="text-4xl font-semibold">
-          Your English Practice Feedback
+          Feedback on This Session
         </h1>
         <p className="text-muted-foreground mt-2">Insights to help you speak more confidently</p>
       </div>

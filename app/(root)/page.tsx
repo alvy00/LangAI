@@ -24,7 +24,7 @@ const page = async () => {
           <h2>Sharpen Your Speaking Skills with AI-Guided Practice & Feedback</h2>
           <p className='text-lg'>Sound fluent and self-assured in every interaction.</p>
           <Button asChild className='btn-primary max-sm:w-full'>
-            <Link href='/interview'>Create a Session</Link>
+            <Link href='/session'>Create a Session</Link>
           </Button>
         </div>
 

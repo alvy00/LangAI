@@ -21,7 +21,7 @@ const PracticeCard = async ({ id, userId, createdAt }: InterviewCardProps) => {
             <p className='badge-text'>{normalizedType}</p>
           </div>
 
-          <h3 className='mt-5 capitalize'>English Practice Session</h3>
+          <h3 className='mt-5 capitalize'>Session</h3>
 
           <div className='flex flex-row gap-5 mt-3'>
             <div className='flex flex-row gap-2'>

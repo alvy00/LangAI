@@ -17,6 +17,8 @@ import {
 } from "@/components/ui/select";
 import { redirect } from "next/navigation";
 import { getCurrentUser } from "@/lib/actions/auth.action";
+import { toast } from "sonner";
+import Link from "next/link";
 
 // 1. Define the validation schema
 const formSchema = z.object({
@@ -77,14 +79,14 @@ const Page = () => {
       });
 
       const result = await res.json();
-      console.log("Session created:", result);
-      redirect("/");
+      toast.success("Session created successfully");
+      
 
     } catch (error) {
-      console.error("Failed to create session:", error);
+      toast.error("Session created successfully");
     }
 
-    
+    redirect("/");
   };
 
   return (
@@ -160,9 +162,20 @@ const Page = () => {
                 </div>
 
                 {/* Submit */}
-                <Button type="submit" className="w-full flex justify-center items-center">
-                  Create Session
-                </Button>
+                
+
+                <div className="flex flex-col md:flex-row gap-4 mt-6">
+
+                    <Button onClick={onSubmit} className="btn-primary flex-1">  
+                        <p className="text-sm font-semibold text-black">Create Session</p>
+                    </Button>
+
+                    <Button className="btn-secondary flex-1">
+                        <Link href="/">
+                            <p className="text-sm font-semibold text-primary-200">Back to Dashboard</p>
+                        </Link>
+                    </Button>
+            </div>
               </form>
             </Form>
           </div>
