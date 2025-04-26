@@ -1,10 +1,11 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Form } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 import {
@@ -15,51 +16,75 @@ import {
   SelectValue
 } from "@/components/ui/select";
 import { redirect } from "next/navigation";
+import { getCurrentUser } from "@/lib/actions/auth.action";
 
 // 1. Define the validation schema
 const formSchema = z.object({
   type: z.string().min(1, "Please select a session type"),
   level: z.string().min(1, "Please select a difficulty level"),
-  questions: z.string().min(1, "Please choose a number of questions"),
+  amount: z.string().min(1, "Please choose a number of questions"),
 });
 
 type FormValues = z.infer<typeof formSchema>;
 
 const Page = () => {
+  const [user, setUser] = useState(null);
+
+  // Fetch current user when the component mounts
+  useEffect(() => {
+    const fetchUser = async () => {
+      const currentUser = await getCurrentUser();
+      setUser(currentUser);
+    };
+    fetchUser();
+  }, []);
+
   // 2. Hook with resolver
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       type: "",
       level: "",
-      questions: "",
+      amount: "",
     },
   });
 
   const onSubmit = async () => {
     const isValid = await form.trigger(); // Triggers validation manually
-  
     if (!isValid) return;
-  
+
     const values = form.getValues();
-  
+
+    if (!user) {
+      console.error("User is not logged in");
+      return;
+    }
+
     try {
+        //https://asynclangai.vercel.app/api/vapi/generate
+        //http://localhost:3000/api/vapi/generate
       const res = await fetch("https://asynclangai.vercel.app/api/vapi/generate", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(values),
+        body: JSON.stringify({
+          type: values.type, // Include the session type
+          level: values.level,
+          amount: values.amount,
+          userid: user.id, // Send the user ID with the request
+        }),
       });
-  
+
       const result = await res.json();
       console.log("Session created:", result);
-      
+      redirect("/");
+
     } catch (error) {
       console.error("Failed to create session:", error);
     }
+
     
-    redirect('/')
   };
 
   return (
@@ -69,7 +94,6 @@ const Page = () => {
           <div className="flex flex-row gap-2 justify-center">
             <Form {...form}>
               <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 w-full max-w-md">
-
                 {/* Session Type */}
                 <div className="flex flex-col space-y-2">
                   <label htmlFor="type" className="label">Session Category</label>
@@ -114,10 +138,10 @@ const Page = () => {
 
                 {/* Number of Questions */}
                 <div className="flex flex-col space-y-2">
-                  <label htmlFor="questions" className="label">What is your preferred number of questions?</label>
+                  <label htmlFor="amount" className="label">What is your preferred number of questions?</label>
                   <Select
-                    value={form.watch("questions")}
-                    onValueChange={(value) => form.setValue("questions", value)}
+                    value={form.watch("amount")}
+                    onValueChange={(value) => form.setValue("amount", value)}
                   >
                     <SelectTrigger>
                       <SelectValue placeholder="Select number" />
@@ -130,8 +154,8 @@ const Page = () => {
                       ))}
                     </SelectContent>
                   </Select>
-                  {form.formState.errors.questions && (
-                    <p className="text-sm text-red-500">{form.formState.errors.questions.message}</p>
+                  {form.formState.errors.amount && (
+                    <p className="text-sm text-red-500">{form.formState.errors.amount.message}</p>
                   )}
                 </div>
 
