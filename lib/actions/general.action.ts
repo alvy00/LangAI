@@ -52,6 +52,15 @@ const { object: { totalScore, categoryScores, strengths, areasForImprovement, fi
   prompt: `
     You are a highly experienced English proficiency evaluator trained to simulate real-world speaking assessments like IELTS Band 9 or TOEFL. You are reviewing a conversation-based practice session transcript to provide an in-depth, honest evaluation. Base your scoring on international CEFR standards (B2–C2 range) and academic-level communication expectations.
     
+    ## Important Instructions:
+    - The transcript may contain formatting characters (e.g., asterisks "*", hashtags "#", backticks "\`\`\`", dashes "-").
+    - Completely ignore all formatting symbols. Treat them as invisible and focus **only on the real conversational content**.
+    - Do not comment on formatting symbols or treat them as part of the speaker's language.
+    - Assume that the conversation you see is *exactly* how it was spoken, minus the formatting.
+
+    ---
+
+
     Here is the session transcript:
     \`\`\`
     ${formattedTranscript}
