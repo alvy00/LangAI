@@ -33,6 +33,7 @@ type User = {
 
 const Page = () => {
   const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -63,9 +64,9 @@ const Page = () => {
       return;
     }
 
+    setLoading(true); // Start loading state
+
     try {
-        //https://asynclangai.vercel.app/api/vapi/generate
-        //http://localhost:3000/api/vapi/generate
       const res = await fetch("https://asynclangai.vercel.app/api/vapi/generate", {
         method: "POST",
         headers: {
@@ -79,15 +80,20 @@ const Page = () => {
         }),
       });
 
+      if (!res.ok) {
+        throw new Error("Failed to create session");
+      }
+
       const result = await res.json();
-      toast.success("Session created successfully");
-      
+      toast.success("Session created successfully!");
 
     } catch (error) {
-      toast.error(`Error creating session: ${error}`);
+      toast.error(`Error creating session: ${error.message}`);
+    } finally {
+      setLoading(false); // Stop loading state
     }
 
-    redirect("/");
+    redirect("/"); // Redirect after session creation
   };
 
   return (
@@ -163,20 +169,21 @@ const Page = () => {
                 </div>
 
                 {/* Submit */}
-                
-
                 <div className="flex flex-col md:flex-row gap-4 mt-6">
+                  <Button type="submit" className="btn-primary flex-1" disabled={loading}>  
+                    {loading ? (
+                      <span>Loading...</span>
+                    ) : (
+                      <p className="text-sm font-semibold text-black">Create Session</p>
+                    )}
+                  </Button>
 
-                    <Button type="submit" className="btn-primary flex-1">  
-                        <p className="text-sm font-semibold text-black">Create Session</p>
-                    </Button>
-
-                    <Button type="button" className="btn-secondary flex-1">
-                        <Link href="/">
-                            <p className="text-sm font-semibold text-primary-200">Back to Dashboard</p>
-                        </Link>
-                    </Button>
-            </div>
+                  <Button type="button" className="btn-secondary flex-1">
+                    <Link href="/">
+                      <p className="text-sm font-semibold text-primary-200">Back to Dashboard</p>
+                    </Link>
+                  </Button>
+                </div>
               </form>
             </Form>
           </div>
