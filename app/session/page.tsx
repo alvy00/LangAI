@@ -20,7 +20,6 @@ import { getCurrentUser } from "@/lib/actions/auth.action";
 import { toast } from "sonner";
 import Link from "next/link";
 
-// 1. Define the validation schema
 const formSchema = z.object({
   type: z.string().min(1, "Please select a session type"),
   level: z.string().min(1, "Please select a difficulty level"),
@@ -28,11 +27,13 @@ const formSchema = z.object({
 });
 
 type FormValues = z.infer<typeof formSchema>;
+type User = {
+  id: string;
+};
 
 const Page = () => {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState<User | null>(null);
 
-  // Fetch current user when the component mounts
   useEffect(() => {
     const fetchUser = async () => {
       const currentUser = await getCurrentUser();
@@ -52,7 +53,7 @@ const Page = () => {
   });
 
   const onSubmit = async () => {
-    const isValid = await form.trigger(); // Triggers validation manually
+    const isValid = await form.trigger();
     if (!isValid) return;
 
     const values = form.getValues();
@@ -71,10 +72,10 @@ const Page = () => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          type: values.type, // Include the session type
+          type: values.type,
           level: values.level,
           amount: values.amount,
-          userid: user.id, // Send the user ID with the request
+          userid: user.id,
         }),
       });
 
@@ -83,7 +84,7 @@ const Page = () => {
       
 
     } catch (error) {
-      toast.error("Session created successfully");
+      toast.error(`Error creating session: ${error}`);
     }
 
     redirect("/");

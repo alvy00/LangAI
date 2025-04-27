@@ -12,42 +12,7 @@ export async function POST(request: Request) {
   const { type, level, amount, userid } = await request.json();
 
   try {
-    // -----------------------Last working question maker AI-----------------------------------
-
-    // const { text: questions } = await generateText({
-    //   model: google('gemini-2.0-flash-001'),
-    //   prompt: `
-    //     Prepare a set of advanced, spoken-English training questions tailored for a professional English coaching session.
-
-    //     The learner's proficiency level is: ${level}.
-    //     The amount of questions required is: ${amount}.
-    //     The session type is: ${type}.  // Include session type in the prompt
-
-    //     Please return only the questions, without any additional text.
-
-    //     Guidelines:
-    //     - Ensure a progressive cognitive gradient: begin with warm-up style questions and gradually increase complexity and linguistic demand.
-    //     - Dynamically match difficulty to proficiency level:
-    //       - Beginner: Focus on present-tense usage, common daily life situations, short structured answers, and vocabulary scaffolding.
-    //       - Intermediate: Introduce descriptive, opinion-based, and situational questions that require logical reasoning or multi-sentence replies.
-    //       - Advanced: Push for abstract thinking, synthesis, argument construction, counterpoint analysis, and hypothetical or ethical scenarios.
-    //     - Align with session type context:
-    //       - Technical: Ask questions rooted in real-world professional challenges, problem-solving workflows, or applied knowledge within a specific domain.
-    //       - Behavioral: Focus on introspective prompts, past experience narratives, value-based decisions, and soft skills evaluation.
-    //       - Mixed: Blend both domains and include transition-style questions that shift from technical expertise to personal reflection.
-    //     - Prioritize spoken realism: simulate how a human coach or voice assistant would naturally ask questions during a live session.
-    //     - Ensure questions are speech-friendly:
-    //       - Avoid written formatting (slashes, asterisks, hyphenation).
-    //       - Keep sentence flow natural for a voice assistant.
-    //       - No overly formal or robotic phrasing.
-
-    //     Return the questions **strictly** in this format:
-    //     ["Question 1", "Question 2", "Question 3", ...]
-
-    //     No introductory or closing text. Do not add labels, explanations, or formatting hints.
-    //     Thank you! ❤️
-    //     `
-    // });
+    //-----------------------Last working question maker AI-----------------------------------
 
     const { text: questions } = await generateText({
       model: google('gemini-2.0-flash-001'),
@@ -78,18 +43,26 @@ export async function POST(request: Request) {
         - Avoid any artificial formatting such as slashes, bullet points, or mechanical constructions.
         - Ensure a natural rhythm and human tone; no robotic, overly formal, or scripted language.
     
-        Critical output rules:
-        - Return **only** a clean JSON array of questions, formatted exactly like: ["Question 1", "Question 2", "Question 3", ...]
-        - Do not add any introductions, labels, context notes, or closing remarks — only the list.
-    
-        Thank you!
+        Return the questions **strictly** in this format:
+        ["Question 1", "Question 2", "Question 3", ...]
+
+        No introductory or closing text. Do not add labels, explanations, or formatting hints.
+        Thank you! ❤️
       `
     });
+
+    // Attempt to parse the returned questions
+    let parsedQuestions = [];
+    try {
+      parsedQuestions = JSON.parse(questions);
+    } catch (error) {
+      throw new Error('Failed to parse questions: ' + error.message);
+    }
 
     const interview = {
       type,
       level,
-      questions: JSON.parse(questions),
+      questions: parsedQuestions,
       userId: userid,
       finalized: true,
       createdAt: new Date().toISOString()
@@ -108,7 +81,7 @@ export async function POST(request: Request) {
     });
   } catch (e) {
     console.error(e);
-    return new Response(JSON.stringify({ success: false, error: e }), {
+    return new Response(JSON.stringify({ success: false, error: e.message }), {
       status: 500,
       headers: {
         "Content-Type": "application/json",

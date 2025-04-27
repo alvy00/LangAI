@@ -41,10 +41,8 @@ export async function createFeedback(params: CreateFeedbackParams) {
   try {
 
     const formattedTranscript = transcript
-  .map(({ role, content }) => `- ${role}: ${content}`)
-  .join('\n');
-
-const cleanedTranscript = formattedTranscript.replace(/[`*#-]/g, '');
+                  .map(({ role, content }) => `- ${role}: ${content}`)
+                  .join('\n');
 
 const { object: { totalScore, categoryScores, strengths, areasForImprovement, finalAssessment } } = await generateObject({
   model: google('gemini-2.0-flash-001', {
@@ -54,20 +52,10 @@ const { object: { totalScore, categoryScores, strengths, areasForImprovement, fi
   prompt: `
     You are a highly experienced English proficiency evaluator trained to simulate real-world speaking assessments like IELTS Band 9 or TOEFL. You are reviewing a conversation-based practice session transcript to provide an in-depth, honest evaluation. Base your scoring on international CEFR standards (B2–C2 range) and academic-level communication expectations.
     
-    ## Important Instructions:
-    - The transcript may contain formatting characters (e.g., asterisks "*", hashtags "#", backticks "\`\`\`", dashes "-").
-    - Completely ignore all formatting symbols. Treat them as invisible and focus **only on the real conversational content**.
-    - Do not comment on formatting symbols or treat them as part of the speaker's language.
-    - Assume that the conversation you see is *exactly* how it was spoken, minus the formatting.
-
-    ---
-
-
     Here is the session transcript:
     \`\`\`
-    ${cleanedTranscript}
+    ${formattedTranscript}
     \`\`\`
-    
     
     ## Evaluation Criteria
 
@@ -164,11 +152,11 @@ const { object: { totalScore, categoryScores, strengths, areasForImprovement, fi
   system: "You are a certified English speaking examiner trained to assess advanced learners using international speaking standards. Provide structured, realistic, and actionable feedback.",
 });
 
-// Add a tiny random variation to avoid every score being identical
-let dynamicScore = totalScore + (Math.random() * 2 - 1);
-dynamicScore = Math.max(0, Math.min(100, dynamicScore));
 
-// Save feedback
+let dynamicScore = totalScore + (Math.random() * 2 - 1);
+dynamicScore = Math.round(Math.max(0, Math.min(100, dynamicScore)));
+
+
 const feedback = await db.collection('feedback').add({
   interviewId,
   userId,
