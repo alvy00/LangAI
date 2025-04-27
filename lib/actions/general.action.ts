@@ -207,3 +207,12 @@ export async function getFeedbackByInterviewId(params: GetFeedbackByInterviewIdP
       ...feedbackDoc.data()
   } as Feedback;
 }
+
+export const deleteInterview = async (id: string) => {
+  try {
+    await db.collection('interviews').doc(id).delete();
+  }catch (error){
+    console.error('Error deleting interview:', error);
+    throw new Error('Failed to delete interview');
+  }
+}

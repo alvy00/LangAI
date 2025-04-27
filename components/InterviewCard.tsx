@@ -1,17 +1,53 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import React from 'react'
+"use client"
+
+import React, { useState, useEffect } from 'react'
 import dayjs from 'dayjs'
 import Image from 'next/image'
 import { Button } from './ui/button'
 import Link from 'next/link'
 import { getFeedbackByInterviewId } from '@/lib/actions/general.action'
 import { InterviewCardProps } from '@/types'
+import { getCurrentUser } from '@/lib/actions/auth.action'
+import { deleteInterview } from '@/lib/actions/general.action'
+import { toast } from 'sonner'
 
-const PracticeCard = async ({ id, level, userId, createdAt }: InterviewCardProps) => {
-  const feedback = (userId && id) ? await getFeedbackByInterviewId({ interviewId: id, userId }) : null
+const PracticeCard = ({ id, level, userId, createdAt }: InterviewCardProps) => {
+  const [user, setUser] = useState<User | null>(null);
+  const [feedback, setFeedback] = useState<any>(null);
 
+  // Fetch the current user and feedback asynchronously
+  useEffect(() => {
+    const fetchData = async () => {
+      const currentUser = await getCurrentUser();
+      setUser(currentUser);
+
+      if (userId && id) {
+        const feedbackData = await getFeedbackByInterviewId({ interviewId: id, userId });
+        setFeedback(feedbackData);
+      }
+    };
+
+    fetchData();
+  }, [id, userId]);
+
+  const handleDelete = async () => {
+
+    if (user?.id !== userId) return;
+    if(!id) return;
+
+    try {
+      await deleteInterview(id);
+      toast.success('Session deleted successfully');
+      window.location.reload();
+    } catch (error) {
+      console.error('Error deleting interview:', error);
+      toast.error('Failed to delete interview');
+    }
+  };
+
+  
   const normalizedType = level;
-  const formattedDate = dayjs(feedback?.createdAt || createdAt || Date.now()).format('MMM D, YYYY')
+  const formattedDate = dayjs(feedback?.createdAt || createdAt || Date.now()).format('MMM D, YYYY');
 
   return (
     <div className='card-border w-[360px] max-sm:w-full min-h-96'>
@@ -46,10 +82,16 @@ const PracticeCard = async ({ id, level, userId, createdAt }: InterviewCardProps
               {feedback ? 'View Feedback' : 'Start Practice'}
             </Link>
           </Button>
+
+          {user?.id === userId && (
+            <Button onClick={handleDelete} className="bg-red-500 text-white hover:bg-red-700 border border-red-600 py-2 px-4 rounded-lg shadow-md cursor-pointer">
+              Delete
+            </Button>
+          )}
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default PracticeCard
+export default PracticeCard;
