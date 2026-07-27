@@ -50,11 +50,6 @@ AsyncLangAI puts a real-time AI voice agent in that gap. Learners create a custo
 - ⚡ **Instant Performance Feedback** — structured, detailed feedback surfaced immediately after each session
 - 🎯 **Targeted Improvement Tips** — actionable, personalized guidance on what to practice next
 - 🔁 **Asynchronous Feedback Pipeline** — Redis-backed Bull job queue processes scoring and feedback generation in the background, keeping the live session responsive
-- 🔐 **Secure Authentication** — Firebase Authentication on the client, verified server-side via the Firebase Admin SDK
-- 🧾 **Type-Safe Forms & Validation** — `react-hook-form` + Zod schemas validate every user input and AI response end-to-end
-- 🌗 **Light/Dark Theming** — `next-themes` for a persistent, system-aware theme
-- 📈 **Usage Insights** — Vercel Analytics baked in
-- 🧩 **Accessible UI Primitives** — built on Radix UI (`select`, `label`, `slot`) with `class-variance-authority`-driven variants
 
 ## 🧠 How It Works
 
@@ -230,10 +225,6 @@ Contributions are welcome! Please check existing [issues](https://github.com/alv
 - [ ] Downloadable session transcripts & feedback reports
 - [ ] Progress dashboard with historical performance trends
 - [ ] Mobile app companion
-
-## 📄 License
-
-Distributed under the MIT License.
 
 ## 📬 Contact
 
